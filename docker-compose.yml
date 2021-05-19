@@ -1,0 +1,8 @@
+version: '3'
+services:
+  endpoint:
+    image: mosorio/fuseki
+    env_file:
+      - .env
+    ports:
+      - 33333:3030

@@ -71,11 +71,9 @@ COPY docker-entrypoint.sh /
 RUN chmod 755 /docker-entrypoint.sh
 
 # SeCo extensions
-COPY silk-arq-1.0.0-SNAPSHOT-with-dependencies.jar /javalibs/
-
 # Fuseki config
-ENV ASSEMBLER $FUSEKI_BASE/configuration/assembler.ttl
-COPY assembler.ttl $ASSEMBLER
+ENV MODEL_CATALOG $FUSEKI_BASE/configuration/model_catalog.ttl
+COPY model_catalog.ttl $MODEL_CATALOG
 ENV CONFIG $FUSEKI_BASE/config.ttl
 COPY fuseki-config.ttl $CONFIG
 RUN mkdir -p $FUSEKI_BASE/databases
@@ -86,12 +84,12 @@ RUN chgrp -R 0 $FUSEKI_BASE \
 
 # Tools for loading data
 ENV JAVA_CMD java -cp "$FUSEKI_HOME/fuseki-server.jar:/javalibs/*"
-ENV TDBLOADER $JAVA_CMD tdb.tdbloader --desc=$ASSEMBLER
+ENV TDBLOADER $JAVA_CMD tdb.tdbloader --desc=$MODEL_CATALOG
 ENV TDBLOADER2 $JENA_BIN/tdbloader2 --loc=$FUSEKI_BASE/databases/tdb
-ENV TDB2TDBLOADER $JAVA_CMD tdb2.tdbloader --desc=$ASSEMBLER
-ENV TEXTINDEXER $JAVA_CMD jena.textindexer --desc=$ASSEMBLER
-ENV TDBSTATS $JAVA_CMD tdb.tdbstats --desc=$ASSEMBLER
-ENV TDB2TDBSTATS $JAVA_CMD tdb2.tdbstats --desc=$ASSEMBLER
+ENV TDB2TDBLOADER $JAVA_CMD tdb2.tdbloader --desc=$MODEL_CATALOG
+ENV TEXTINDEXER $JAVA_CMD jena.textindexer --desc=$MODEL_CATALOG
+ENV TDBSTATS $JAVA_CMD tdb.tdbstats --desc=$MODEL_CATALOG
+ENV TDB2TDBSTATS $JAVA_CMD tdb2.tdbstats --desc=$MODEL_CATALOG
 
 WORKDIR /jena-fuseki
 EXPOSE 3030
