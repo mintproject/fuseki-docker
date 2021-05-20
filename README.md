@@ -20,10 +20,14 @@ $ docker-compose up -d endpoint
 Import the backup into a new dataset.
 
 ```bash
+$ curl https://github.com/mintproject/fuseki-docker/blob/master/backups/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz?raw=true -o /tmp/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz
+```
+
+```bash
 $ docker-compose exec endpoint \
     /jena/bin/tdbloader2   \
         --loc=/fuseki-base/databases/new_dataset \
-        /backups/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz
+        /tmp/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz
 ```
 
 Remove the old dataset (modelCatalog-1.7.0) and link the newest.
