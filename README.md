@@ -21,7 +21,7 @@ Import the backup into a new dataset.
 
 ```bash
 $ docker-compose exec endpoint \
-    curl https://github.com/mintproject/fuseki-docker/blob/master/backups/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz?raw=true -o /tmp/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz
+    wget https://github.com/mintproject/fuseki-docker/blob/master/backups/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz?raw=true -O /tmp/modelCatalog-1.7.0_2021-05-20_14-02-34.nq.gz
 ```
 
 ```bash
