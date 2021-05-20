@@ -20,13 +20,16 @@ LABEL maintainer="jouni.tuominen@aalto.fi"
 RUN apk add --update pwgen bash wget ca-certificates findutils coreutils ruby && rm -rf /var/cache/apk/*
 
 # Update below according to https://jena.apache.org/download/
-ENV FUSEKI_SHA512 2b92f3304743da335f648c1be7b5d7c3a94725ed0a9b5123362c89a50986690114dcef0813e328126b14240f321f740b608cc353417e485c9235476f059bd380
+ENV FUSEKI_SHA512 cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
 ENV FUSEKI_VERSION 3.8.0
-ENV JENA_SHA512 321c763fa3b3532fa06bb146363722e58e10289194f622f2e29117b610521e62e7ea51b9d06cd366570ed143f2ebbeded22e5302d2375b49da253b7ddef86d34
+ENV JENA_SHA512 0ebf2ecef04bd3534d471fc004425df905ee19d0d9def67d7b1531b49c9de20557dc5a53ae455b2ec7abc6592bfd8c70d6e68cba40cc4380e9313b669cae3383
 ENV JENA_VERSION 3.8.0
 
 ENV MIRROR http://www.eu.apache.org/dist/
 ENV ARCHIVE http://archive.apache.org/dist/
+ENV ASF_MIRROR http://www.apache.org/dyn/mirrors/mirrors.cgi?action=download&filename=
+ENV ASF_ARCHIVE http://archive.apache.org/dist/
+
 
 # Config and data
 ENV FUSEKI_BASE /fuseki-base
@@ -40,28 +43,29 @@ ENV JENA_BIN $JENA_HOME/bin
 WORKDIR /tmp
 # sha512 checksum
 RUN echo "$FUSEKI_SHA512  fuseki.tar.gz" > fuseki.tar.gz.sha512
-# Download/check/unpack/move Fuseki in one go (to reduce image size)
-RUN wget -O fuseki.tar.gz $MIRROR/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz || \
-    wget -O fuseki.tar.gz $ARCHIVE/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz && \
-    sha512sum -c fuseki.tar.gz.sha512 && \
-    tar zxf fuseki.tar.gz && \
-    mv apache-jena-fuseki* $FUSEKI_HOME && \
-    rm fuseki.tar.gz* && \
-    cd $FUSEKI_HOME && rm -rf fuseki.war
+
+RUN     (curl --location --silent --show-error --fail --retry-connrefused --retry 3 --output fuseki.tar.gz ${ASF_MIRROR}jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz || \
+         curl --fail --silent --show-error --retry-connrefused --retry 3 --output fuseki.tar.gz $ASF_ARCHIVE/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz) && \
+        sha512sum -c fuseki.tar.gz.sha512 && \
+        tar zxf fuseki.tar.gz && \
+        mv apache-jena-fuseki* $FUSEKI_HOME && \
+        rm fuseki.tar.gz* && \
+        cd $FUSEKI_HOME && rm -rf fuseki.war && chmod 755 fuseki-server
+
 
 # Get tdbloader2 from Jena
 # sha512 checksum
 RUN echo "$JENA_SHA512  jena.tar.gz" > jena.tar.gz.sha512
 # Download/check/unpack/move Jena in one go (to reduce image size)
-RUN wget -O jena.tar.gz $MIRROR/jena/binaries/apache-jena-$JENA_VERSION.tar.gz || \
-    wget -O jena.tar.gz $ARCHIVE/jena/binaries/apache-jena-$JENA_VERSION.tar.gz && \
-    sha512sum -c jena.tar.gz.sha512 && \
-    tar zxf jena.tar.gz && \
-	mkdir -p $JENA_BIN && \
-	mv apache-jena*/lib $JENA_HOME && \
-	mv apache-jena*/bin/tdbloader2* $JENA_BIN && \
-    rm -rf apache-jena* && \
-    rm jena.tar.gz*
+RUN (curl --location --silent --show-error --fail --retry-connrefused --retry 3 --output jena.tar.gz ${ASF_MIRROR}jena/binaries/apache-jena-$JENA_VERSION.tar.gz || \
+         curl --fail --silent --show-error --retry-connrefused --retry 3 --output jena.tar.gz $ASF_ARCHIVE/jena/binaries/apache-jena-$FUSEKI_VERSION.tar.gz) && \
+        sha512sum -c jena.tar.gz.sha512 && \
+        tar zxf jena.tar.gz && \
+        mkdir -p ${JENA_BIN} && \
+	    mv apache-jena*/lib $JENA_HOME && \
+	    mv apache-jena*/bin/tdbloader2* $JENA_BIN && \
+        rm -rf apache-jena* && \
+        rm jena.tar.gz*
 
 # As "localhost" is often inaccessible within Docker container,
 # we'll enable basic-auth with a random admin password
