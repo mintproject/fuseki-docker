@@ -36,11 +36,11 @@ Remove the old dataset (modelCatalog-1.7.0) and link the newest.
 $ docker-compose exec endpoint \
     rm -rf /fuseki-base/databases/modelCatalog-1.7.0
 $ docker-compose exec endpoint \
-    ln -s /fuseki-base/databases/new_dataset /fuseki-base/databases/modelCatalog-1.7.0
+    mv /fuseki-base/databases/new_dataset /fuseki-base/databases/modelCatalog-1.7.0
 ```
 
 Restart endpoint
 
 ```bash
-$ docker restart endpoint
+$ docker-compose restart endpoint
 ```

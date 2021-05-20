@@ -21,9 +21,9 @@ RUN apk add --update pwgen bash wget ca-certificates findutils coreutils ruby &&
 
 # Update below according to https://jena.apache.org/download/
 ENV FUSEKI_SHA512 2b92f3304743da335f648c1be7b5d7c3a94725ed0a9b5123362c89a50986690114dcef0813e328126b14240f321f740b608cc353417e485c9235476f059bd380
-ENV FUSEKI_VERSION 3.17.0
+ENV FUSEKI_VERSION 3.8.0
 ENV JENA_SHA512 321c763fa3b3532fa06bb146363722e58e10289194f622f2e29117b610521e62e7ea51b9d06cd366570ed143f2ebbeded22e5302d2375b49da253b7ddef86d34
-ENV JENA_VERSION 3.17.0
+ENV JENA_VERSION 3.8.0
 
 ENV MIRROR http://www.eu.apache.org/dist/
 ENV ARCHIVE http://archive.apache.org/dist/
