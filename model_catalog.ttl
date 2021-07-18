@@ -6,9 +6,9 @@
 @prefix fuseki: <http://jena.apache.org/fuseki#> .
 
 :service_tdb_all  a                   fuseki:Service ;
-        rdfs:label                    "TDB modelCatalog-1.7.0" ;
+        rdfs:label                    "TDB modelCatalog" ;
         fuseki:dataset                :tdb_dataset_readwrite ;
-        fuseki:name                   "modelCatalog-1.7.0" ;
+        fuseki:name                   "modelCatalog" ;
         fuseki:serviceQuery           "query" , "sparql" ;
         fuseki:serviceReadGraphStore  "get" ;
         fuseki:serviceReadWriteGraphStore
@@ -18,5 +18,5 @@
 
 :tdb_dataset_readwrite
         a             tdb:DatasetTDB ;
-        tdb:location  "/fuseki-base/databases/modelCatalog-1.7.0"
+        tdb:location  "/fuseki-base/databases/modelCatalog"
 
