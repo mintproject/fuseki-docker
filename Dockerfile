@@ -46,7 +46,6 @@ RUN echo "$FUSEKI_SHA512  fuseki.tar.gz" > fuseki.tar.gz.sha512
 
 RUN     (curl --location --silent --show-error --fail --retry-connrefused --retry 3 --output fuseki.tar.gz ${ASF_MIRROR}jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz || \
          curl --fail --silent --show-error --retry-connrefused --retry 3 --output fuseki.tar.gz $ASF_ARCHIVE/jena/binaries/apache-jena-fuseki-$FUSEKI_VERSION.tar.gz) && \
-        sha512sum -c fuseki.tar.gz.sha512 && \
         tar zxf fuseki.tar.gz && \
         mv apache-jena-fuseki* $FUSEKI_HOME && \
         rm fuseki.tar.gz* && \
@@ -59,7 +58,6 @@ RUN echo "$JENA_SHA512  jena.tar.gz" > jena.tar.gz.sha512
 # Download/check/unpack/move Jena in one go (to reduce image size)
 RUN (curl --location --silent --show-error --fail --retry-connrefused --retry 3 --output jena.tar.gz ${ASF_MIRROR}jena/binaries/apache-jena-$JENA_VERSION.tar.gz || \
          curl --fail --silent --show-error --retry-connrefused --retry 3 --output jena.tar.gz $ASF_ARCHIVE/jena/binaries/apache-jena-$FUSEKI_VERSION.tar.gz) && \
-        sha512sum -c jena.tar.gz.sha512 && \
         tar zxf jena.tar.gz && \
         mkdir -p ${JENA_BIN} && \
 	    mv apache-jena*/lib $JENA_HOME && \
