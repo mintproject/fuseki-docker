@@ -2,13 +2,14 @@ version: '3'
 services:
   endpoint:
     image: mintproject/fuseki-docker
+    build: .
+    user: 9008:9008
     env_file:
       - .env
     ports:
       - 3030:3030
     volumes:
       - ./backups:/backups
-      - databases:/fuseki-base/databases/
 
 volumes:
   databases:
